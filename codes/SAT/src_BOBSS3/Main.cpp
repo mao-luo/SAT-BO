@@ -42,11 +42,7 @@ void loadAssignmentPrefer(istream& is, SATProblem& gc){
 			assignmentPrefer.push_back(t);
 		}
 	}
-	// vector<double> assignmentPrefer;
-	// for(int i=0;i<gc.num;i++){
-	// 	assignmentPrefer.push_back((rand()%10)/10.0);
-	// }
-	// gc.assignmentPrefers.push_back(assignmentPrefer);
+
 	if(gc.assignmentPrefers.size()==2){
 		gc.perUpLimit={15,15};
 	}
@@ -64,7 +60,6 @@ void saveOutput(ostream& os, vector<VariableValue>& Xs,int varnum) {
 		}
 		os<<"0"<<endl;
 	}
-	// for (auto val = X.begin(); val != X.end(); ++val) { os << *val << endl; }
 }
 bool check(vector<VariableValue>& Xs,SATProblem& SAT){
 	for(auto X:Xs){
@@ -81,7 +76,6 @@ bool check(vector<VariableValue>& Xs,SATProblem& SAT){
 	
 	return true;
 }
-// /home/hyw/workspace/DatabaseAttackAndVerification/tu-rbowrapper-master/build/sat_optimize /home/hyw/workspace/DatabaseAttackAndVerification/specification_data/8ad82779-ae44-4ef1-b628-0649aa871806/eec4b47d-7989-4fbc-9239-3c8c8cfcbdc3.cnf /home/hyw/workspace/DatabaseAttackAndVerification/tu-rbowrapper-master/solve/eec4b47d-7989-4fbc-9239-3c8c8cfcbdc3.sol /home/hyw/workspace/DatabaseAttackAndVerification/tu-rbowrapper-master/var_weight/eec4b47d-7989-4fbc-9239-3c8c8cfcbdc3.vw 30 30
 void test(istream& inputStream, ostream& outputStream,istream& preferinputStream,  long long secTimeout, int randSeed,bool isHasAssignment,int solUpLimit) {
 	// cerr << "load input." << endl;
 	SATProblem SAT;

@@ -3,9 +3,16 @@ An Efficient SAT-Based Bayesian Optimization Algorithm for Verification Rules Hi
 
 #### Compiler Environmen
 
+Running on linux platform
+
 ##### python
 
 see ./requirements.txt
+
+```
+cd codes
+python setup.py install
+```
 
 ##### c++
 
@@ -41,7 +48,8 @@ make
 ##### Run  example
 
 ``` 
-python main.py ../specification_data/0a764ddc-378b-49aa-a4a4-17de37715e86.cnf --num 3 --vitrual ./vitrualFlow/case1/0a764ddc-378b-49aa-a4a4-17de37715e86.txt --runName ./build/sat_optimize
+cd codes 
+python main.py --input ../data/6e3abcf2-76fb-45df-adbf-607ce5cee26f.cnf --num 3 --traffic virtualFlow/case1/binomial/6e3abcf2-76fb-45df-adbf-607ce5cee26f.txt --runName sat_optimize
 ```
 
 sat_optimize is our Adaptive DPLL SAT Solver in paper
@@ -51,9 +59,9 @@ sat_optimize is our Adaptive DPLL SAT Solver in paper
 ```
 ./SAT //SAT solver
 ./turbo //Bayes algorithm
-./var_weitht //variable attribute preference file
-./solve //Solution file used to store SAT solver output
-./Ans：//It is the solution traffic coverage file corresponding to the calculation returned by SAT.
-./virtualFlow //three generated traffic environment paths
+./var_weight //Variable attribute preference file
+./solve //Solution file used to store SAT solver's output
+./Ans：//It is the solution file of traffic coverage corresponding to the calculation returned by SAT.
+./virtualFlow //Three generated traffic environment paths
 ```
 

@@ -33,10 +33,9 @@ class SAT:
         self.InputFileName=self.getFileName(inputPath)
         self.satRunFilePath=os.path.join(current_directory,'build/sat_test')
         self.satRunFilePath1=os.path.join(current_directory,'build/'+rnname)
-        print(self.satRunFilePath1)
         self.solvePath=os.path.join(current_directory,os.path.join('solve',self.getSolName(self.InputFileName)))
         self.varWeightPath=os.path.join(current_directory,os.path.join('var_weight',self.getVarName(self.InputFileName)))
-        self.vitrualFlowPath=os.path.join(current_directory,os.path.join(vitrualPath,self.getFlowName(self.InputFileName)))
+        self.vitrualFlowPath=os.path.join(current_directory,vitrualPath)
         self.vitrualAnsPath=os.path.join(current_directory,os.path.join('Ans',self.getFlowName(self.InputFileName)))
         self.logPath=os.path.join(current_directory,os.path.join('log',self.getFlowName(self.InputFileName)))
         self.getVarNumAndSolNum()
@@ -56,6 +55,7 @@ class SAT:
     def getTXTName(self,filename):
         return filename.split('.')[0]+'.txt'
     def runSAT(self,ctrlstr):
+        config=''
         if(ctrlstr=="walksat"):
             config=self.walksat()
         elif(ctrlstr=="randSample"):
@@ -73,7 +73,6 @@ class SAT:
         else:
             config=config+" > "+self.logPath
             order=self.satRunFilePath+" "+config
-        # print(order)
         # if((ctrlstr=="creatFlow")):
         #     print(order)
         os.system(order)
@@ -93,8 +92,6 @@ class SAT:
         config="--vitrual"+" "+self.solvePath+" "+self.vitrualFlowPath+" "+self.vitrualAnsPath
         return config
     def getVarNumAndSolNum(self):
-        # os.system(self.satRunFilePath1+" "+self.inputPath+" "+self.solvePath+" "+str(30)+" "+str(100)+" 2> "+self.logPath)
-        # print(self.satRunFilePath1+" "+self.inputPath+" "+self.solvePath+" "+str(30)+" "+str(100))
         self.runSAT("randSample")
         f = open(self.solvePath)
         line = f.readline()
@@ -141,7 +138,6 @@ class SAT:
         f.close()
         return np.array(FX)
     def updataVarWeight(self,Weight):
-        # print(len(Weight[0]))
         f = open(self.varWeightPath,'w')
         f.write(str(len(Weight))+'\n')
         for idweight in Weight:
@@ -196,38 +192,26 @@ def getNum(x):
     return (1+x+x*x)
 
 
-# python -u "/Users/hyw/Desktop/tu-rbowrapper-master/main.py" -i /Users/hyw/Desktop/data/1.cnf
 def runTurbo(turbo,sat):
     # sat.runSAT("creatFlow")
     """Run the full optimization process."""
     kkk=0
-    # print("maxeval")
-    # print(turbo.max_evals)
-    # print("solnum")
-    # print(sat.solNum)
+
     dic={}
     unUse=[]
     while turbo.n_evals < turbo.max_evals-turbo.batch_size:
         # Generate and evalute initial design points
-        # 3. （外部平台）将X修正为X'，获得X'对应的目标函数值fX'
+        # (External platform) Correct X to X', obtain the objective function value fX' corresponding to X'
         sat.runSAT("randSample")
         sat.getVarNumAndSolNum()
         sat.runSAT("vitrual")
         X_init = sat.getX()
-        # print(X_init)
         fX_init = sat.getFX()
-        # print(len(fX_init))
-        # kkk+=1
-        # print(turbo.n_evals)
+
         turbo.initial_solutions_of_trust_region(X_init, fX_init)
-        # print(turbo.n_evals) 
-        # print(turbo.max_evals)
-        # Thompson sample to get next suggestions
-        # print("ok")
+       
         while turbo.n_evals < turbo.max_evals-turbo.batch_size and turbo.is_trust_region_big_enough():
-            # print("a")
             X_next = turbo.suggested_sampling()
-            # print("b")
             AssignmentPreferences=[]
             for recommend in X_next:
                 iter=[]
@@ -253,7 +237,6 @@ def runTurbo(turbo,sat):
                 AssignmentPreference=AssignmentPreferences
             else:
                 AssignmentPreference.append(X_next[random.randint(1,len(X_next))-1])
-            # print("c")
             sat.updataVarWeight(AssignmentPreference)
             sat.runSAT("walksat")
             sat.getVarNumAndSolNum()
@@ -265,7 +248,7 @@ def runTurbo(turbo,sat):
             fX_next=sat.getCandicatesFX(X_next)
             # Evaluate batch
             # fX_next = np.array([[turbo.f(x)] for x in X_next])
-            # 9. 更新置信区间turbo1.solutions_and_obj_after_sampling(X, fX)
+            # Update confidence interval turbo1.solutions_and_obj_after_sampling(X, fX)
             turbo.solutions_and_obj_after_sampling(X_next, fX_next)
     # print("jiaohu:"+str(kkk))
 
@@ -296,7 +279,7 @@ def OneFlowAns(f,turbo1,sat):
     print("Cover:\n\t"+str(TrueCover))
     
     sat.checkSolve(np.array([X]))
-    # 输出文件名，场景覆盖度上限，场景覆盖度,是否是正确解
+    # Output file name, scenario coverage upper limit, scenario coverage, whether it is the correct solution.
     return [MAX_Cover,TrueCover,sat.readCheck()]
    
 
@@ -309,7 +292,7 @@ def optimize(file,current_directory,inputPath,sat,times):
         lb=f.lb,  # Numpy array specifying lower bounds
         ub=f.ub,  # Numpy array specifying upper bounds
 
-        # 解的数量
+        # number of solutions
         n_init=sat.solNum,  # Number of initial bounds from an Latin hypercube design
         max_evals=(times-1)*min(10,sat.solNum)+sat.solNum+1,  # Maximum number of evaluations
         batch_size=min(10,sat.solNum) , # How large batch size TuRBO uses
@@ -329,13 +312,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='argparse testing')
     parser.add_argument('--input','-i',type=str, default ="bk",required=True,help="input file")
     parser.add_argument('--num','-n',type=str, default =3,help="input file")
-    parser.add_argument('--traffic','-v',type=str, default ="vitrualFlow",help="input file")
+    parser.add_argument('--traffic','-v',type=str, default ="virtualFlow",help="input file")
     parser.add_argument('--runName','-r',type=str, default ="sat_optimize",help="input file")
     
     args = parser.parse_args()
     current_directory = os.path.dirname(os.path.abspath(__file__))   
-    sat=SAT(current_directory,args.input,args.vitrual,args.runName)
-    f = open("./anser/"+sat.getTXTName(sat.InputFileName),'w')
+    sat=SAT(current_directory,args.input,args.traffic,args.runName)
+    f = open("./answer/"+sat.getTXTName(sat.InputFileName),'w')
     ansers=[]
     mylist=[]
     for t in range(int(1)):
@@ -351,11 +334,9 @@ if __name__ == "__main__":
     bestNum=min(bestNum,int(1))
     print(bestNum)
     for i in range(bestNum):
-        # print(mylist[i][1])
         MaxCovers=MaxCovers+ansers[mylist[i][1]][0]
         TrueCovers=TrueCovers+ansers[mylist[i][1]][1]
         TrueNums=TrueNums+ansers[mylist[i][1]][2]
-        # print(ansers[mylist[i][1]][1])
     print(mylist)
     print(ansers)
     f.write(sat.InputFileName+"\t"+str(sat.varNum)+"\t"+str(sat.clauseNum)+"\t"+str(MaxCovers)+"\t"+str(TrueCovers)+"\t"+str(TrueNums)+"\n")

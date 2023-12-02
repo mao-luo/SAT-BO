@@ -1,0 +1,2 @@
+Solve is right!
+time : 0.000306s

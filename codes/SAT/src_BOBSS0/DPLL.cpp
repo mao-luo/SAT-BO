@@ -484,7 +484,7 @@ namespace szx
 		}
 		sol ansers[3];
 	public:
-		//递归改为非递归
+		//change recursion to non-recursion
 		void solve(vector<VariableValue>& output, SATProblem& input, std::function<bool()> isTimeout, int seed,bool isHasAssignmentPrefer)
 		{
 			NodeNums=0;

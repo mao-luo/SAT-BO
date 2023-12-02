@@ -1,0 +1,1 @@
+/usr/bin/c++  -O0 -Wall -g -ggdb -fPIC CMakeFiles/sat_optimize.dir/src_optimize/DPLL.cpp.o CMakeFiles/sat_optimize.dir/src_optimize/Main.cpp.o -o sat_optimize 

@@ -42,11 +42,7 @@ void loadAssignmentPrefer(istream& is, SATProblem& gc){
 			assignmentPrefer.push_back(t);
 		}
 	}
-	// vector<double> assignmentPrefer;
-	// for(int i=0;i<gc.num;i++){
-	// 	assignmentPrefer.push_back((rand()%10)/10.0);
-	// }
-	// gc.assignmentPrefers.push_back(assignmentPrefer);
+
 	if(gc.assignmentPrefers.size()==2){
 		gc.perUpLimit={15,15};
 	}
