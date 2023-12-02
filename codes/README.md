@@ -49,7 +49,7 @@ make
 
 ``` 
 cd codes 
-python main.py --input ../data/6e3abcf2-76fb-45df-adbf-607ce5cee26f.cnf --num 3 --traffic virtualFlow/case1/binomial/6e3abcf2-76fb-45df-adbf-607ce5cee26f.txt --runName sat_optimize
+python main.py --input ../benchmark_verificationRule-SAT-Encoding/6e3abcf2-76fb-45df-adbf-607ce5cee26f.cnf --num 3 --traffic virtualFlow/case1/binomial/6e3abcf2-76fb-45df-adbf-607ce5cee26f.txt --runName sat_optimize
 ```
 
 sat_optimize is our Adaptive DPLL SAT Solver in paper
