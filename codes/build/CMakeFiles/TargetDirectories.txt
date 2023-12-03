@@ -1,8 +1,0 @@
-/home/dev/sat-bo/codes/build/CMakeFiles/sat_test.dir
-/home/dev/sat-bo/codes/build/CMakeFiles/sat_optimize.dir
-/home/dev/sat-bo/codes/build/CMakeFiles/BOBSS1.dir
-/home/dev/sat-bo/codes/build/CMakeFiles/BOBSS2.dir
-/home/dev/sat-bo/codes/build/CMakeFiles/BOBSS3.dir
-/home/dev/sat-bo/codes/build/CMakeFiles/BOBSS0.dir
-/home/dev/sat-bo/codes/build/CMakeFiles/edit_cache.dir
-/home/dev/sat-bo/codes/build/CMakeFiles/rebuild_cache.dir
